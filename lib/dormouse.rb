@@ -64,6 +64,20 @@ module Dormouse
 
     def flush = self
 
+    # Reads what the client sends after the request (full duplex), as an IO
+    # would: up to length bytes, or everything; nil at end of stream.
+    def read(length = nil)
+      return @sock.read if length.nil?
+      @sock.readpartial(length)
+    rescue EOFError
+      nil
+    end
+
+    def close_read = nil
+
+    # The response ends with the last chunk; the connection stays the server's.
+    def close_write = close
+
     def close
       return if @closed
       @closed = true
@@ -234,7 +248,8 @@ module Dormouse
 
       rest = head_end + 4
       buf.replace(buf[rest, buf.length - rest] || "")
-      env["rack.input"] = StringIO.new(read_body(sock, buf, env))
+      # binary, as the Rack SPEC asks of rack.input
+      env["rack.input"] = StringIO.new(read_body(sock, buf, env).b)
       env
     end
 
