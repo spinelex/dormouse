@@ -111,23 +111,31 @@ module Dormouse
       self
     end
 
-    # Accept until the listener is closed (stop, or TERM / INT). A second
-    # TERM / INT exits at once, whatever is still in flight.
+    # Accept until stop, TERM or INT, then let the requests in flight
+    # finish. The trap only writes to a pipe, which wakes the select; a
+    # second TERM / INT exits at once.
     def run
       listen unless @listener
       listener = @listener
+      wake_r, wake_w = IO.pipe
       stopping = false
       stop = lambda do
         exit!(1) if stopping
         stopping = true
-        listener.close
+        wake_w.write(".")
       end
       Signal.trap("TERM") { stop.call }
       Signal.trap("INT") { stop.call }
+      workers = []
       loop do
+        ready = IO.select([listener, wake_r])
+        break if ready[0].include?(wake_r)
         sock = listener.accept
-        Thread.new(sock) { |s| serve(s) }
+        workers.select!(&:alive?)
+        workers << Thread.new(sock) { |s| serve(s) }
       end
+      listener.close unless listener.closed?
+      workers.each(&:join)
     rescue IOError, SystemCallError
       nil
     end
