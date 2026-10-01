@@ -35,6 +35,11 @@ port = 19393
 server = Dormouse::Server.new(app, port: port).listen
 Thread.new { server.run }
 
+def show(out)
+  head, body = out.split("\r\n\r\n", 2)
+  puts "#{head.lines.first.chomp} #{body.inspect}"
+end
+
 def req(port, raw)
   s = TCPSocket.new("127.0.0.1", port)
   s.write(raw)
@@ -46,14 +51,14 @@ ensure
   s&.close
 end
 
-req(port, "GET /?q=1 HTTP/1.1\r\nHost: example.test:8080\r\nConnection: close\r\n\r\n")
-req(port, "POST /echo HTTP/1.1\r\nHost: x\r\nContent-Length: 5\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nhello")
-req(port, "POST /echo HTTP/1.1\r\nHost: x\r\nTransfer-Encoding: chunked\r\nConnection: close\r\n\r\n3\r\nabc\r\n0\r\n\r\n")
-req(port, "GET /each HTTP/1.1\r\nHost: x\r\nConnection: close\r\n\r\n")
-req(port, "GET /stream HTTP/1.1\r\nHost: x\r\nConnection: close\r\n\r\n")
-req(port, "HEAD / HTTP/1.1\r\nHost: x\r\nConnection: close\r\n\r\n")
-req(port, "GET /head HTTP/1.1\r\nHost: x\r\nConnection: close\r\n\r\n")
-req(port, "GET / HTTP/1.0\r\n\r\n")
-req(port, "OPTIONS * HTTP/1.1\r\nHost: x\r\nConnection: close\r\n\r\n")
+show req(port, "GET /?q=1 HTTP/1.1\r\nHost: example.test:8080\r\nConnection: close\r\n\r\n")
+show req(port, "POST /echo HTTP/1.1\r\nHost: x\r\nContent-Length: 5\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nhello")
+show req(port, "POST /echo HTTP/1.1\r\nHost: x\r\nTransfer-Encoding: chunked\r\nConnection: close\r\n\r\n3\r\nabc\r\n0\r\n\r\n")
+show req(port, "GET /each HTTP/1.1\r\nHost: x\r\nConnection: close\r\n\r\n")
+show req(port, "GET /stream HTTP/1.1\r\nHost: x\r\nConnection: close\r\n\r\n")
+show req(port, "HEAD / HTTP/1.1\r\nHost: x\r\nConnection: close\r\n\r\n")
+show req(port, "GET /head HTTP/1.1\r\nHost: x\r\nConnection: close\r\n\r\n")
+show req(port, "GET / HTTP/1.0\r\n\r\n")
+show req(port, "OPTIONS * HTTP/1.1\r\nHost: x\r\nConnection: close\r\n\r\n")
 server.stop
 puts errors.empty? ? "lint: ok" : errors
