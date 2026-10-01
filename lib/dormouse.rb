@@ -290,8 +290,14 @@ module Dormouse
     # The request body, by Content-Length or chunked. Sends 100 Continue
     # first when the client waits for it.
     def read_body(sock, buf, env)
-      chunked = (env["HTTP_TRANSFER_ENCODING"] || "").downcase.include?("chunked")
-      len = (env["CONTENT_LENGTH"] || "0").to_i
+      coding = env["HTTP_TRANSFER_ENCODING"]
+      length = env["CONTENT_LENGTH"]
+      # a length that is not a number, a coding that does not end in chunked,
+      # or both framings at once (a smuggling vector) are refused
+      raise Refusal.new(400, "Bad Request") if length && !length.match?(/\A\d+\z/)
+      raise Refusal.new(400, "Bad Request") if coding && (length || coding.split(",").last.strip.downcase != "chunked")
+      chunked = !coding.nil?
+      len = (length || "0").to_i
       return "" unless chunked || len > 0
       raise Refusal.new(413, "Content Too Large") if len > @max_body_bytes
 
