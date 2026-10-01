@@ -111,12 +111,19 @@ module Dormouse
       self
     end
 
-    # Accept until the listener is closed (stop, or TERM / INT).
+    # Accept until the listener is closed (stop, or TERM / INT). A second
+    # TERM / INT exits at once, whatever is still in flight.
     def run
       listen unless @listener
       listener = @listener
-      Signal.trap("TERM") { listener.close }
-      Signal.trap("INT") { listener.close }
+      stopping = false
+      stop = lambda do
+        exit!(1) if stopping
+        stopping = true
+        listener.close
+      end
+      Signal.trap("TERM") { stop.call }
+      Signal.trap("INT") { stop.call }
       loop do
         sock = listener.accept
         Thread.new(sock) { |s| serve(s) }
