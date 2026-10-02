@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <title>Dormouse</title>
+  <!-- a sleepy dormouse curled up on a red Ruby-ish cushion -->
+  <defs>
+    <radialGradient id="fur" cx="45%" cy="40%" r="65%">
+      <stop offset="0" stop-color="#e8b27a"/>
+      <stop offset="1" stop-color="#c9864a"/>
+    </radialGradient>
+    <radialGradient id="belly" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#fff6e8"/>
+      <stop offset="1" stop-color="#f6dfc0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- cushion -->
+  <ellipse cx="120" cy="196" rx="96" ry="26" fill="#b3122e"/>
+  <ellipse cx="120" cy="190" rx="92" ry="22" fill="#d7263d"/>
+  <ellipse cx="96" cy="184" rx="30" ry="6" fill="#ef5a6b" opacity="0.6"/>
+
+  <!-- fluffy tail curling around the front -->
+  <path d="M188 168 C 222 150, 220 92, 186 82 C 160 76, 150 104, 170 112"
+        fill="none" stroke="#b97540" stroke-width="30" stroke-linecap="round"/>
+  <path d="M188 168 C 222 150, 220 92, 186 82 C 160 76, 150 104, 170 112"
+        fill="none" stroke="#dca067" stroke-width="18" stroke-linecap="round"/>
+
+  <!-- body -->
+  <ellipse cx="124" cy="146" rx="66" ry="46" fill="url(#fur)"/>
+  <ellipse cx="104" cy="160" rx="34" ry="26" fill="url(#belly)"/>
+
+  <!-- ears -->
+  <circle cx="58" cy="82" r="22" fill="#c9864a"/>
+  <circle cx="58" cy="82" r="13" fill="#f2a7a0"/>
+  <circle cx="112" cy="74" r="22" fill="#c9864a"/>
+  <circle cx="112" cy="74" r="13" fill="#f2a7a0"/>
+
+  <!-- head -->
+  <circle cx="84" cy="118" r="44" fill="url(#fur)"/>
+  <ellipse cx="74" cy="134" rx="26" ry="18" fill="url(#belly)"/>
+
+  <!-- closed sleepy eyes -->
+  <path d="M60 114 q 8 7 16 0" fill="none" stroke="#3b2414" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M94 112 q 8 7 16 0" fill="none" stroke="#3b2414" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- cheeks -->
+  <ellipse cx="56" cy="128" rx="8" ry="5" fill="#f2a7a0" opacity="0.8"/>
+  <ellipse cx="114" cy="126" rx="8" ry="5" fill="#f2a7a0" opacity="0.8"/>
+
+  <!-- nose, mouth, whiskers -->
+  <ellipse cx="84" cy="128" rx="5" ry="3.8" fill="#8a4b3a"/>
+  <path d="M84 132 q -4 5 -8 2 M84 132 q 4 5 8 2" fill="none" stroke="#3b2414" stroke-width="2" stroke-linecap="round"/>
+  <g stroke="#7a5236" stroke-width="1.5" stroke-linecap="round" opacity="0.7">
+    <line x1="62" y1="132" x2="38" y2="128"/>
+    <line x1="62" y1="136" x2="40" y2="140"/>
+    <line x1="106" y1="132" x2="130" y2="126"/>
+    <line x1="106" y1="136" x2="128" y2="140"/>
+  </g>
+
+  <!-- tiny paws -->
+  <ellipse cx="72" cy="164" rx="9" ry="6" fill="#f6dfc0"/>
+  <ellipse cx="96" cy="168" rx="9" ry="6" fill="#f6dfc0"/>
+
+  <!-- zzz -->
+  <g fill="#7a5236" font-family="Georgia, serif" font-weight="bold">
+    <text x="140" y="70" font-size="22">z</text>
+    <text x="160" y="52" font-size="28">z</text>
+    <text x="186" y="36" font-size="34">Z</text>
+  </g>
+</svg>
